@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 st.title("🚖 Ride Completion Predictor")
+st.divider()
 
 @st.cache_data
 def load_and_train_model():
@@ -112,7 +113,7 @@ if st.button("🔮 Predict Ride Outcome", use_container_width=True):
     predicted_status = le_target.classes_[prediction]
     predicted_prob = probability[prediction]
     
-    st.divider()
+    
     st.subheader("Prediction Result")
     
     if predicted_status == 'Completed':
