@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
-st.title("🚖 Ride Completion Predictor")
+st.title("🚖 Ride Prediction App")
 st.divider()
 
 @st.cache_data
@@ -129,4 +129,4 @@ if st.button("🔮 Predict Ride Outcome", use_container_width=True):
 
 st.divider()
 
-st.caption("🚖 Ride Completion Predictor | Created by Dhruv Raj Singh")
+st.caption("🚖 Ride Prediction App | Created by Dhruv Raj Singh")
