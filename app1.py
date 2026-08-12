@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 st.title("🚖 Ride Completion Predictor")
@@ -26,6 +26,9 @@ def load_and_train_model():
     y = data['Booking Status']
     
     numeric_cols = X.select_dtypes(include=['number']).columns
+    
+    X['data_missing_flag'] = X[numeric_cols].isna().any(axis=1).astype(int)
+    
     X[numeric_cols] = X[numeric_cols].fillna(X[numeric_cols].median())
     
     text_cols = X.select_dtypes(include=['object']).columns
@@ -51,12 +54,13 @@ def load_and_train_model():
     y_train_encoded = le_target.fit_transform(y_train)
     y_test_encoded = le_target.transform(y_test)
     
-    model = LogisticRegression(
-        multi_class='multinomial',
-        solver='lbfgs',
-        max_iter=1000,
+    model = RandomForestClassifier(
+        n_estimators=200,
+        max_depth=8,
+        min_samples_leaf=5,
         random_state=42,
-        class_weight='balanced'
+        class_weight='balanced',
+        n_jobs=-1
     )
     model.fit(X_train_scaled, y_train_encoded)
     
@@ -96,7 +100,8 @@ user_data = pd.DataFrame({
     'Ride Distance': [ride_distance],
     'Driver Ratings': [driver_rating],
     'Customer Rating': [customer_rating],
-    'Payment Method': [payment_method]
+    'Payment Method': [payment_method],
+    'data_missing_flag': [0]
 })
 
 user_data['Vehicle Type'] = label_encoders['Vehicle Type'].transform(user_data['Vehicle Type'])
